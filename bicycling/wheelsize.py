@@ -1,18 +1,23 @@
 import argparse
 import math
 
-# Constants
-PI = 3.14159
+class Wheel:
+    def __init__(self):
 
-# Argument parsing
-parser = argparse.ArgumentParser(description="Handle tire size input.")
+        # constants
+        self.PI = 3.14159
 
-parser.add_argument('size', type=str, help='ISO wheel size')
+        # Argument parsing
+        self.parser = argparse.ArgumentParser(description="Handle tire size input.")
+        self.parser.add_argument('size', type=str, help='ISO wheel size')
+        self.args = self.parser.parse_args()
 
-args = parser.parse_args()
+        self.tirewidth, self.wheelsize = map(int, self.args.size.split("-"))
 
-size = args.size
+    def Circumference(self):
+        return (self.wheelsize + (2 * self.tirewidth)) * self.PI
 
-tirewidth, wheelsize = map(int, size.split("-"))
-circumference = (wheelsize + (2 * tirewidth)) * PI
-print(circumference)
+if __name__ == '__main__':
+    wheel = Wheel()
+    print(wheel.Circumference())
+
