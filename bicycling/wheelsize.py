@@ -4,6 +4,10 @@ import math
 class UserInput:
     def __init__(self):
 
+        # Set variables
+        self.tirewidth = 0
+        self.wheelsize = 0
+
         # Define arguments
         self.parser = argparse.ArgumentParser(description="Handle tire size input.")
         self.parser.add_argument('size', type=str, help='Wheel size')
@@ -16,15 +20,10 @@ class UserInput:
             self.tirewidth, self.wheelsize = map(int, self.args.size.split("-"))
 
 class Wheel:
-    def __init__(self):
+    def __init__(self, input):
 
         # constants
         self.PI = 3.14159
-
-        # Argument parsing
-        self.parser = argparse.ArgumentParser(description="Handle tire size input.")
-        self.parser.add_argument('size', type=str, help='ISO wheel size')
-        self.args = self.parser.parse_args()
 
     def Circumference(self):
         return (self.wheelsize + (2 * self.tirewidth)) * self.PI
