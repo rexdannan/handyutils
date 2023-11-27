@@ -6,10 +6,22 @@ import wheelsize
 
 class TestWheelsize(unittest.TestCase):
 
-    @patch('sys.argv', ['wheelsize.py', '30-622'])
-    def test_wheel(self):
+    isotst = '30-622'
+
+    @patch('sys.argv', ['wheelsize.py', isotst])
+    def test_input(self):
         with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-            wheel = wheelsize.Wheel()
+            input = wheelsize.UserInput()
+            input.GetUserInput()
+            self.assertEqual(input.tirewidth, 30)
+            self.assertEqual(input.wheelsize, 622)
+
+    @patch('sys.argv', ['wheelsize.py', isotst])
+    def test_wheel_iso(self):
+        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+            input = wheelsize.UserInput()
+            input.GetUserInput()         
+            wheel = wheelsize.Wheel(input)
             result = wheel.Circumference()
             self.assertEqual(result, 2142.56438)
 
