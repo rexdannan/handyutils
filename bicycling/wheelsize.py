@@ -13,7 +13,7 @@ class UserInput:
         self.MMINCH = 25.4
         self.ISOREGEX = r"^\d{2}\-\d{3}$"
         self.ENGREGEX = r"^\d{2}\.?\d?\s[xX]\s\d\.?\d*$"
-        self.FRREGEX = r"\d{3}\s[xX]\s\d{2}[A-Da-d]$"
+        self.FRREGEX = r"^\d{3}\s[xX]\s\d{2}[A-Da-d]$"
 
         # Variables
         self.tirewidth = 0
