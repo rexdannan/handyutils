@@ -6,17 +6,22 @@ import wheelsize
 
 class TestWheelsize(unittest.TestCase):
 
-    isotst = '30-622'
+    validunits = ["mm", "cm", "inch"]
+    validiso = ["54-550",  "70-584", "30-622"]
 
-    @patch('sys.argv', ['wheelsize.py', isotst])
-    def test_input(self):
-        with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
-            input = wheelsize.UserInput()
-            input.GetUserInput()
-            self.assertEqual(input.tirewidth, 30)
-            self.assertEqual(input.wheelsize, 622)
+    for isosize in validiso:
+        for unit in validunits:
+            print(isosize, unit)
+            @patch('sys.argv', ['wheelsize.py', isosize, unit])
+            def test_input(self):
+                with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+                    print("Hello")
+                    input = wheelsize.UserInput()
+                    input.GetUserInput()
+                    self.assertEqual(input.tirewidth, 30)
+                    self.assertEqual(input.wheelsize, 622)
 
-    @patch('sys.argv', ['wheelsize.py', isotst])
+    @patch('sys.argv', ['wheelsize.py', "30-622", "mm"])
     def test_wheel_iso(self):
         with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
             input = wheelsize.UserInput()
