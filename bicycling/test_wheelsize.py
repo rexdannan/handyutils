@@ -5,6 +5,12 @@ from io import StringIO
 import sys
 import wheelsize
 
+# Constants
+MMINCH = 25.4
+MMCM = 10
+engtoiso = {16 : 305, 20 : 406, 24 : 507, 26 : 559, 27 : 630, 27.5 : 584, 29 : 622, 32 : 686, 36 : 787}
+frtoiso = {400 : 340, 500 : 440, 650 : 584, 700 : 622}
+
 class TestWheelsize(unittest.TestCase):
 
     validunits = ["mm", "MM", "cm", "CM", "inch", "INCH"]
@@ -30,8 +36,26 @@ class TestWheelsize(unittest.TestCase):
                     with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
                         input = wheelsize.UserInput()
                         input.GetUserInput()
-                        self.assertEqual(input.tirewidth, int(eng_size[:2]))
-                        self.assertEqual(input.wheelsize, int(eng_size[3:6]))
+                        eng_wheel, eng_width = map(float, eng_size.split("x"))
+                        eng_wheel = engtoiso.get(eng_wheel)
+                        eng_width *= MMINCH
+                        self.assertEqual(input.tirewidth, eng_width)
+                        self.assertEqual(input.wheelsize, eng_wheel)
+                        self.assertEqual(input.unit, unit.lower())
+
+    def test_valid_fr_input(self):
+        for fr_size in self.validfr:
+            for unit in self.validunits:
+                with patch('sys.argv', ['wheelsize.py', fr_size, unit]):
+                    with patch('sys.stdout', new_callable=StringIO) as mock_stdout:
+                        input = wheelsize.UserInput()
+                        input.GetUserInput()
+                        fr_wheel, fr_width = map(str, fr_size.split("x"))
+                        fr_width = int(fr_width[:2])
+                        fr_wheel = float(fr_wheel)
+                        fr_wheel = frtoiso.get(fr_wheel)
+                        self.assertEqual(input.tirewidth, fr_width)
+                        self.assertEqual(input.wheelsize, fr_wheel)
                         self.assertEqual(input.unit, unit.lower())
 
     # @parameterized.expand([(isosize, unit) for isosize in validiso for unit in validunits])
