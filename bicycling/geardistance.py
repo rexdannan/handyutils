@@ -33,8 +33,12 @@ class GearDistance(Wheel):
     def __init__(self, input):
         Wheel.__init__(self, input)
 
+        # Variables
+        self.chainring = input.chainring
+        self.cog = input.cog
+
     def CalcDistance(self):
-        pass
+        return self.Circumference() * (self.chainring / self.cog)
 
 if __name__ == '__main__':
     input = GDUserInput()
