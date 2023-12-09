@@ -35,6 +35,7 @@ class UserInput:
         self.tirewidth = 0
         self.wheelsize = 0
         self.unit = ""
+        self.testtext = "HEY THERE!"
 
         # Define arguments
         self.parser = argparse.ArgumentParser(description="Handle tire size input.")
