@@ -4,13 +4,7 @@ import argparse
 import sys
 import math
 
-
 # Constants
-GRAVITY = 9.80665
-MILEHMETERS = 0.44704
-KMHMETERS = 0.2777778
-LB2KG = 0.4535924
-
 HELP_INPUT = ["-h", "help"]
 HELP_TEXT = """
 This utility calculates the wattage required to address gravitational force for a given grade and rider/bicycle mass.
@@ -21,24 +15,30 @@ Syntax: gravitywattage.py <grade> <speed> <weight>
 Examples:
 gravitywattage.py .05 12m 180lb - 5% grade, 12 mph, 180 pounds
 gravitywattage.py -.07 20k 80kg - -7% grade (downhill), 20 kilometers, 80 kilograms
-    """
-
+"""
 
 class GravityWattage:
 
+    # Constants
+    GRAVITY = 9.80665
+    MILEHMETERS = 0.44704
+    KMHMETERS = 0.2777778
+    LB2KG = 0.4535924
+
     def __init__(self):
         # Parameters
-        self.parser = argparse.ArgumentParser(description="Gravitational wattage input.")
-        self.parser.add_argument("grade", type=str, help="Grade % expressed as a decimal")
-        self.parser.add_argument("speed", type=str, help="Speed expressed as mph or km")
-        self.parser.add_argument("mass", type=str, help="Bicycle and rider weight expressed as lbs or kg")
+        self.parser = argparse.ArgumentParser(description='Gravitational wattage input.')
+        self.parser.add_argument('grade', type=str, help='Grade % expressed as a decimal')
+        self.parser.add_argument('speed', type=str, help='Speed expressed as mph or km')
+        self.parser.add_argument('mass', type=str, help='Bicycle and rider weight expressed as lbs or kg')
+
+        self.args = self.parser.parse_args()
 
         self.grade = 0
         self.speed = 0
         self.mass = 0
 
     def ProcessInput(self):
-        self.args = self.parser.parse_args()
 
         # Process grade or help request
         if self.args.grade:
@@ -63,9 +63,9 @@ class GravityWattage:
                 
                 # Convert speed to meters per second
                 if speedunit == "m":
-                    self.speed *= MILEHMETERS
+                    self.speed *= self.MILEHMETERS
                 else:
-                    self.speed *= KMHMETERS
+                    self.speed *= self.KMHMETERS
             else:
                 sys.exit("Suffix the distance with \"m\" for miles or \"k\" for kilometers.")
 
@@ -78,12 +78,12 @@ class GravityWattage:
                 except:
                     sys.exit("Please enter a number for mass.")
                 if massunit == "lb":
-                    self.mass *= LB2KG
+                    self.mass *= self.LB2KG
             else:
                 sys.exit("Enter a mass unit as \"lb\" for pounds or \"kg\" for kilograms")
 
     def CalcWattage(self):
-        return self.grade * self.speed * self.mass * GRAVITY
+        return self.grade * self.speed * self.mass * self.GRAVITY
     
 if __name__ == '__main__':
     watts = GravityWattage()
