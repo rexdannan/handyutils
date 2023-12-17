@@ -1,21 +1,10 @@
+# This is a simple python utility to calculate the wattage needed to overcome a grade
+# 
 # Formula used: watts(PE) = slope * speed in meters/sec * total mass in KG * 9.8 m/sec^2
 
 import argparse
 import sys
 import math
-
-# Constants
-HELP_INPUT = ["-h", "help"]
-HELP_TEXT = """
-This utility calculates the wattage required to address gravitational force for a given grade and rider/bicycle mass.
-It does not factor in rolling resistance, drivetrain losses, and wind resistence. Input format:
-
-Syntax: gravitywattage.py <grade> <speed> <weight>
-
-Examples:
-gravitywattage.py .05 12m 180lb - 5% grade, 12 mph, 180 pounds
-gravitywattage.py -.07 20k 80kg - -7% grade (downhill), 20 kilometers, 80 kilograms
-"""
 
 class GravityWattage:
 
@@ -25,14 +14,23 @@ class GravityWattage:
     KMHMETERS = 0.2777778
     LB2KG = 0.4535924
 
+    HELP_TEXT = """
+    This utility calculates the wattage required to address gravitational force for a given grade and rider/bicycle mass.
+    It does not factor in rolling resistance, drivetrain losses, and wind resistence. Input format:
+    
+    Syntax: gravitywattage.py <grade> <speed> <weight>
+
+    Examples:
+    gravitywattage.py .05 12m 180lb - 5% grade, 12 mph, 180 pounds
+    gravitywattage.py .07 20k 80kg - 7% grade (downhill), 20 kilometers, 80 kilograms
+    """
+
     def __init__(self):
         # Parameters
-        self.parser = argparse.ArgumentParser(description='Gravitational wattage input.')
-        self.parser.add_argument('grade', type=str, help='Grade % expressed as a decimal')
+        self.parser = argparse.ArgumentParser(description=self.HELP_TEXT)
+        self.parser.add_argument('grade', type=str, help='Grade %% expressed as a decimal')
         self.parser.add_argument('speed', type=str, help='Speed expressed as mph or km')
         self.parser.add_argument('mass', type=str, help='Bicycle and rider weight expressed as lbs or kg')
-
-        self.args = self.parser.parse_args()
 
         self.grade = 0
         self.speed = 0
@@ -40,17 +38,16 @@ class GravityWattage:
 
     def ProcessInput(self):
 
+        self.args = self.parser.parse_args()
+
         # Process grade or help request
         if self.args.grade:
-            if self.args.grade in HELP_INPUT:
-                sys.exit(HELP_TEXT)
-            else:
-                try:
-                    self.grade = float(self.args.grade)
-                except:
-                    sys.exit("Please enter a grade between -1.00 and 1.00.")
-                if self.grade > 1 or self.grade < -1:
-                    sys.exit("Please enter a grade between -1.00 and 1.00.")
+            try:
+                self.grade = float(self.args.grade)
+            except:
+                sys.exit("Please enter a grade between -1.00 and 1.00.")
+            if self.grade > 1 or self.grade < -1:
+                sys.exit("Please enter a grade between -1.00 and 1.00.")
 
         # Process speed
         if self.args.speed:
@@ -82,7 +79,13 @@ class GravityWattage:
             else:
                 sys.exit("Enter a mass unit as \"lb\" for pounds or \"kg\" for kilograms")
 
-    def CalcWattage(self):
+    def CalcWattage(self, grade=0, speed=0, mass=0):
+        if grade:
+            self.grade = grade
+        if speed:
+            self.speed = speed
+        if mass:
+            self.mass = mass 
         return self.grade * self.speed * self.mass * self.GRAVITY
     
 if __name__ == '__main__':
