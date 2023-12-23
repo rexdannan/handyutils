@@ -40,7 +40,7 @@ class GravityWattage:
 
         self.args = self.parser.parse_args()
 
-        # Process grade or help request
+        # Process grade
         if self.args.grade:
             try:
                 self.grade = float(self.args.grade)
