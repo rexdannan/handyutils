@@ -23,7 +23,7 @@ class FtpAct
     def __init__(self):
         self.avg_watts=0
         self.duration=0
-        self.duration_factor
+        self.duration_factor=1
 
         # Parameters
         self.parser = argparse.ArgumentParser(description=self.HELP_TEXT)
@@ -34,7 +34,7 @@ class FtpAct
         pass
 
     def CalcFTPAct(self):
-        pass
+        return self.duration_factor * self.avg_watts
 
 if __name__ == '__main__':
     ftp = FtpAct()
