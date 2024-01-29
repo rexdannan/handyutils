@@ -4,7 +4,7 @@
 import sys
 import argparse
 
-class FtpAct
+class FtpAct:
 
     # Constants
     HELP_TEXT = """
@@ -23,7 +23,7 @@ class FtpAct
     def __init__(self):
         self.avg_watts=0
         self.duration=0
-        self.duration_factor=1
+        self.duration_factor=0
 
         # Parameters
         self.parser = argparse.ArgumentParser(description=self.HELP_TEXT)
@@ -31,7 +31,25 @@ class FtpAct
         self.parser.add_argument('duration', type=str, help='Duration of the test expressed in minutes')
     
     def ProcessInput(self):
-        pass
+        self.args = self.parser.parse_args()
+
+        if self.args.avg_watts:
+            try:
+                self.avg_watts = int(self.args.avg_watts)
+            except:
+                sys.exit("Please enter wattage of 1 or greater.")
+            if self.avg_watts < 1:
+                sys.exit("Please enter wattage of 1 of greater.")
+
+        if self.args.duration:
+            try:
+                self.duration = int(self.args.duration)
+            except:
+                sys.exit("Please enter a duration of 1, 3, 5, 20, or 60 minutes.")
+            try:
+                self.duration_factor = self.time_factor[self.duration]
+            except:
+                sys.exit("Please enter a duration of 1, 3, 5, 20, or 60 minutes.")
 
     def CalcFTPAct(self):
         return self.duration_factor * self.avg_watts
